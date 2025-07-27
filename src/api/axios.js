@@ -5,6 +5,7 @@ import axios from 'axios';
 const instance = axios.create({
   baseURL: '/api',
   headers: { 'Content-Type': 'application/json' },
+  withCredentials: true,
 });
 
 instance.interceptors.request.use(
@@ -18,21 +19,25 @@ instance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// 로그인 API도 인스턴스로 호출
+// ✅ 로그인 함수
 export function loginMember(email, password) {
-  return instance.post('/member/login', {email, password} );
+  return instance.post('/member/login', { email, password });
 }
 
-// 토큰 붙여서 API 호출할 때도 인스턴스 사용
-instance.get('/board/list')
-  .then(response => { console.log("보드 불러옴");
-  })
-  .catch(error => {
-    console.error('에러!', error);
-  });
-
-export default instance;  // 필요하면 인스턴스 export
-
+// ✅ 게시글 목록 불러오기
 export function fetchBoardList(page = 0, size = 10) {
-  return instance.get('/board/list', { params: { page, size } });
+  return instance.get('/board/list', {
+    params: { page, size },
+  });
 }
+
+// ✅ 게시글 작성
+export function postBoard(title, content) {
+  return instance.post('/board/writedone', {
+    title,
+    content,
+  });
+}
+
+// ✅ 인스턴스 export (다른 곳에서 직접 axios 호출하고 싶을 경우)
+export default instance;

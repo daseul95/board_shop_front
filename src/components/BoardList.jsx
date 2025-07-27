@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { fetchBoardList } from '../api/axios.js';
 import Pagination from './Pagination';
 
@@ -11,6 +12,9 @@ function BoardList() {
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+     const navigate = useNavigate();
+
 useEffect(() => {
    setLoading(true);
     fetchBoardList(nowPage - 1, 10)
@@ -43,6 +47,10 @@ useEffect(() => {
 
     return (
         <div>
+            {/* ✅ 글쓰기 버튼 추가 */}
+                  <div style={{ textAlign: 'right', marginBottom: '10px' }}>
+                    <button onClick={() => navigate('/board/write')}>글쓰기</button>
+                  </div>
       <table className="board-table">
           <thead>
             <tr>
